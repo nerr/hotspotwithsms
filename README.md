@@ -1,4 +1,4 @@
 hotspotwithsms
 ==============
 
-hotspot with sms
+by Leon Zhuang leon@nerrsoft.com
