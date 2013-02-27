@@ -6,7 +6,7 @@ $config = array(
 	'pageTitle' = 'Free Wi-Fi Hotspot',
 );
 
-class hotspotsmsauth
+/*class hotspotsmsauth
 {
 	
 	public function auth($mp, $pass)
@@ -30,6 +30,6 @@ class hotspotsmsauth
 
 		return $pass;
 	}
-}
+}*/
 
 ?>
