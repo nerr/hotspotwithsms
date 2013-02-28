@@ -1,22 +1,12 @@
 <?php
 $config = array(
-	'fetionAccount'  => '13524289996',
-	'fetionPassword' => 'nerr5257',
-	'fetionTrytime'  => 3,
+	'smsAccount'  => '13524289996',
+	'smsPassword' => 'nerr5257',
+	'smsTrytime'  => 3,
 );
 
 require 'class/PHPFetion.php';
 
-function check_status($status_code)
-{
-   preg_match( '/^.*HTTP\/1\.1 200 OK.*$/si', $status_code, $status );
-   if ( isset($status[0]) ){
-     return true;
-   }else{
-     echo "Result:$status_code\n";
-     return false;
-   }
-}
 
 /*$fetion = new PHPFetion($config['fetionAccount'], $config['fetionPassword']);
 try
@@ -41,6 +31,17 @@ catch( Exception $e)
 	echo "Date:".date('Y-m-d H:i:s', time()).";ERROR:".$e."\n";
 }*/
 
+
+
+function getRandCode($bit)
+{
+	$code = '';
+	for($i = 0; $i < $bit; $i++)
+	{
+		$code .= rand(0,9);
+	}
+	return $code;
+}
 
 
 ?>
