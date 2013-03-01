@@ -152,7 +152,7 @@
                         alert("请确认您的手机号码");
                     else
                     {
-                        var url = "http://192.168.2.102/hotspot/serv/auth.php?action=step1&mobile="+mp+"&callback=?";
+                        var url = "http://192.168.2.2/hotspot/serv/auth.php?action=step1&mobile="+mp+"&callback=?";
                         $.getJSON(url, function(data){
                             if(data.status==true)
                             {
@@ -179,7 +179,7 @@
                         alert("验证码格式不正确");
                         return false;
                     }
-                    var url = "http://192.168.2.102/hotspot/serv/auth.php?action=step2&mobile="+mp+"&smspass="+smspass+"&callback=?";
+                    var url = "http://192.168.2.2/hotspot/serv/auth.php?action=step2&mobile="+mp+"&smspass="+smspass+"&callback=?";
                     $.getJSON(url, function(data){
                         if(data.status==false)
                         {
