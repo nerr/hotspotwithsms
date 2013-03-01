@@ -9,7 +9,7 @@ $config = array(
 
 	//-- MySQL info
 	'dbUser' => 'root',
-	'dbPass' => '911911',
+	'dbPass' => 'nerrsoft',
 	'dbName' => 'hotspot',
 	'dbHost' => '127.0.0.1',
 );
