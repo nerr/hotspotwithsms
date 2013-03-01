@@ -101,12 +101,12 @@ class hotspotsms
 	public function step2()
 	{
 		$currtime = time();
-		$mobile  = $_POST['mobile'];
-		$smspass = $_POST['smspass'];
+		$mobile  = $_GET['mobile'];
+		$smspass = $_GET['smspass'];
 
-		$sql = "select * from log where mobile='$mobile' and smspass='$smspass' and logtime+300>$currtime order by logtime desc limit 1";
+		$sql = "select id from log where mobile='$mobile' and smspass='$smspass' and logtime+300>$currtime order by logtime desc limit 1";
 		$res = mysqli_query($this->_mysqli, $sql);
-		if($res->num_rows > 0)
+		if($res->num_rows == 1)
 		{
 			$back['status'] = true;
 		}
