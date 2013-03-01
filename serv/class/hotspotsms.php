@@ -88,6 +88,7 @@ class hotspotsms
 		if($this->sendSms($mobile, $smspass))
 		{
 			$back['status'] = true;
+			$back['md5smspass'] = md5(md5($smspass));
 		}
 		else
 		{

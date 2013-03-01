@@ -76,7 +76,7 @@
 
 			<div class="masthead">
 				<ul class="nav nav-pills pull-right">
-					<li class="active"><a href="#">新浪微博</a></li>
+					<li class="active"><a href="http://weibo.com/mlyinxiang" target="_blank">新浪微博</a></li>
 					<li class="active"><a href="#">帮助</a></li>
 				</ul>
 				<h3 class="muted">麻辣印象 &middot; 免费无线网络 &middot; 登录</h3>
@@ -116,7 +116,7 @@
 							<span id="authstatus"></span>
 						</p>
 
-						<input type="hidden" name="auths" id="auths" value="" />
+						<input type="hidden" name="md5smspass" id="md5smspass" value="" />
 						<input type="hidden" name="mode_login">
 						<input type="hidden" name="redirect" value="$redirect">
 						<input type="hidden" name="accept_terms" value="yes">
@@ -149,7 +149,9 @@
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="js/jquery.js"></script>
+		<script src="js/jquery.md5.js"></script>
 		<script src="js/js/bootstrap.min.js"></script>
+
 		<!-- <script src="js/jquery.jsonp-2.4.0.min"></script> -->
 
 		<!-- js -->
@@ -167,11 +169,13 @@
 						$('#sendsms').attr('disabled', 'disabled');
 						$('#sendstatus').text('请稍候').attr('class', 'msginfo');
 
-						var url = "http://192.168.7.105/hotspot/serv/auth.php?action=step1&mobile="+mp+"&callback=?";
+						var url = "http://192.168.2.2/hotspot/serv/auth.php?action=step1&mobile="+mp+"&callback=?";
 						$.getJSON(url, function(data){
 							if(data.status==true)
 							{
 								$('#sendstatus').text('短信发送成功,请查收').attr('class', 'msginfo');
+
+								$('#md5smspass').val(data.md5smspass);
 
 								if($('#smspass').attr('disabled')=='disabled')
 									$('#smspass').attr('disabled', false);
@@ -197,93 +201,11 @@
 						return false;
 					}
 
-
-
-
-					/*//$.ajaxSetting.async = false; 
-					var url = "http://192.168.2.2/hotspot/serv/auth.php?action=step2&mobile="+mp+"&smspass="+smspass+"&callback=?";
-
-
-					$.ajaxSettings.async = false; 
-					$.getJSON(url, function(data){
-						if(data.status == true)
-						{
-							$('#authstatus').text('验证成功').attr('class', 'msginfo');
-							$('#auths').val('OK');
-						}
-						else
-							$('#authstatus').text(data.message).attr('class', 'msgerro');
-					});*/
-
-
-					/*//after  
-					$.ajax({  
-						url: url,
-						dataType: 'text',  
-						data: 'text',  
-						async: false,  
-						success: function(json){  
-							//success code  
-						}  
-					});*/
-
-					/*var url = "http://192.168.2.2/hotspot/serv/auth.php";
-					var param = {};
-					param.mobile = mp;
-					param.smspass= smspass;
-					param.action = step2;
-
-
-					$.ajax({
-						async: false, 
-						type: 'get',
-						url:  url,
-						data: param,
-						dataType: 'jsonp',
-						error: function(){
-							alert('fail');
-						},  
-						success: function(data){  
-							 if(data.status == true)
-							{
-								$('#authstatus').text('验证成功').attr('class', 'msginfo');
-								$('#auths').val('OK');
-							}
-							else
-								$('#authstatus').text(data.message).attr('class', 'msgerro');
-							}  
-					});*/
-					// 初始化数据，同一个cookie一分钟的访问量都算一次
-					var j = null;
-					$.ajax({
-						async: false,
-						type: "get",
-						dataType: "jsonp",
-						jsonp:"callback",
-						url: "http://192.168.7.105/hotspot/serv/auth.php",
-						data:{"action":"step2", "smspass":smspass, "mobile":mp},
-						success: function(data){
-							j = data;
-							//alert(data.status);
-							if(data.status == true)
-							{
-								$('#authstatus').text('验证成功').attr('class', 'msginfo');
-								//$('#auths').val('OK');
-							}
-							else
-							{
-								$('#authstatus').text(data.message).attr('class', 'msgerro');
-								return false;
-							}
-						},
-					})
-
-					alert(j.status);
-
-					/*if($('#auths').val()!='OK')
+					if($.md5($.md5(smspass))!=$('#md5smspass').val())
 					{
+						$('#authstatus').text('验证失败,请检查您的验证码是否正确').attr('class', 'msgerro');
 						return false;
-					}*/
+					}
 				});
 			});
 		</script>
