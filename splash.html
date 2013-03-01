@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="utf-8">
         <title>麻辣印象 &middot; 免费无线网络</title>
@@ -152,13 +152,19 @@
                         alert("请确认您的手机号码");
                     else
                     {
-                        $('#mobile').attr('disabled', 'disabled');
-                        $('#sendsms').attr('disabled', 'disabled');
+                        var url = "http://192.168.2.102/hotspot/serv/auth.php?action=step1&mobile="+mp+"&callback=?";
+                        $.getJSON(url, function(data){
+                            if(data.status==true)
+                            {
+                                $('#mobile').attr('disabled', 'disabled');
+                                $('#sendsms').attr('disabled', 'disabled');
 
-                        if($('#smspass').attr('disabled')=='disabled')
-                            $('#smspass').attr('disabled', false);
-                        if($('#submit').attr('disabled')=='disabled')
-                            $('#submit').attr('disabled', false);
+                                if($('#smspass').attr('disabled')=='disabled')
+                                    $('#smspass').attr('disabled', false);
+                                if($('#submit').attr('disabled')=='disabled')
+                                    $('#submit').attr('disabled', false);
+                            }
+                        });
                     }
                     return false;
                 });
@@ -167,11 +173,20 @@
                 var spformat = /(^[0-9]{6}$)/;
                 $('#auth').submit(function(){
                     var smspass = $.trim($('#smspass').val());
+                    var mp = $.trim($('#mobile').val());
                     if(!smspass.match(spformat))
                     {
                         alert("验证码格式不正确");
                         return false;
                     }
+                    var url = "http://192.168.2.102/hotspot/serv/auth.php?action=step2&mobile="+mp+"&smspass="+smspass+"&callback=?";
+                    $.getJSON(url, function(data){
+                        if(data.status==false)
+                        {
+                            alert(data.message);
+                            return false;
+                        }
+                    });
                 });
             });
         </script>
