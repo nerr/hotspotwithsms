@@ -9,10 +9,16 @@ include 'PHPFetion.php';
 class hotspotsms
 {
 	/**
+     * 发送短信手机号for fetion
+     * @var string
+     */
+    //protected $_mobile;
+
+    /**
      * 发送短信手机号
      * @var string
      */
-    protected $_mobile;
+    protected $_account;
 
     /**
      * 发送短信密码
@@ -46,7 +52,7 @@ class hotspotsms
 	*/
 	public function __construct($cfg)
 	{
-		$this->_mobile   = $cfg['smsAccount'];
+		$this->_account  = $cfg['smsAccount'];
 		$this->_password = $cfg['smsPassword'];
 		$this->_trytime  = $cfg['smsTrytime'];
 		$this->_smsTextPrefix = $cfg['smsTextPrefix'];
@@ -66,7 +72,7 @@ class hotspotsms
 	{
 		$logtime = time();
 		$mobile  = $_GET['mobile'];
-
+		
 		//-- 确认库中是否存在有效验证码 - 
 		$sql = "select smspass from log where mobile='$mobile' and logtime+300>$logtime order by logtime desc limit 1";
 		$res = mysqli_query($this->_mysqli, $sql);
@@ -120,12 +126,53 @@ class hotspotsms
 		echo $_GET['callback'].'('.json_encode($back).')';
 	}
 
-    /**
-	 * 向指定手机号码发送验证码
+	/**
+	 * 向指定手机号码发送验证码(fetion)
 	 * @param string $mobile
 	 * @param string $msg
 	 */
-	protected function sendSms($mobile, $msg)
+	public function sendSms($mobile, $text)
+	{
+		$msg  = $this->_smsTextPrefix.$text.$this->_smsTextSuffix;
+		$msg = urlencode($msg);
+
+		$url  = 'http://210.5.158.31/hy/?expid=0&encode=utf8';
+		$url .= '&uid='.$this->_account;
+		$url .= '&auth='.$this->_password;
+		$url .= '&mobile='.$mobile;
+		$url .= '&msg='.$msg;
+		
+		try{
+
+			$ch = curl_init();
+			curl_setopt ($ch, CURLOPT_URL, $url);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
+			$statuscode = curl_exec($ch);
+			curl_close($ch);
+
+			$code = explode(',', $statuscode);
+
+			if($code[0]==0)
+				//echo "Date:".date('Y-m-d H:i:s', time()).";Finished\n";
+				return true;
+			else
+				//echo "Date:".date('Y-m-d H:i:s', time()).";Failed\n";
+				return false;
+		}
+		catch( Exception $e)
+		{
+			//echo "Date:".date('Y-m-d H:i:s', time()).";ERROR:".$e."\n";
+			return false;
+		}
+	}
+
+    /**
+	 * 向指定手机号码发送验证码(fetion)
+	 * @param string $mobile
+	 * @param string $msg
+	 */
+	protected function sendSms_fetion($mobile, $msg)
 	{
 		$fetion = new PHPFetion($this->_mobile, $this->_password);
 		try
