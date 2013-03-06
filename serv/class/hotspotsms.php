@@ -126,6 +126,47 @@ class hotspotsms
 		echo $_GET['callback'].'('.json_encode($back).')';
 	}
 
+	public function admin($pass)
+	{
+		$html = 'Welcome';
+
+		if($pass != md5('sunyu'))
+			return $html;
+
+		$sql = "select * from log order by id desc";
+		$res = $this->_mysqli->query($sql);
+		if($res)
+		{
+			$html = '<table class="table table-hover">
+					<thead>
+					<tr>
+					<th>#</th>
+					<th>时间</th>
+					<th>手机号码</th>
+					<th>动态密码</th>
+					</tr>
+					</thead>
+					<tbody>';
+
+			while($row = $res->fetch_object())
+			{
+				$html .= '<tr>';
+				$html .= '<td>'.$row->id.'</td>';
+				$html .= '<td>'.date('Y-m-d H:i:s', $row->logtime).'</td>';
+				$html .= '<td>'.$row->mobile.'</td>';
+				$html .= '<td>'.$row->smspass.'</td>';
+				$html .= '</tr>';
+			}
+
+			$html .= '</tbody>
+					</table>';
+
+		}
+
+
+		return $html;
+	}
+
 	/**
 	 * 向指定手机号码发送验证码(fetion)
 	 * @param string $mobile
