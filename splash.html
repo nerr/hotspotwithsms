@@ -53,6 +53,10 @@
 			.msgerro {
 				color: red;
 			}
+
+			.qr {
+				height: 130px;
+			}
 		</style>
 		<link href="css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -153,14 +157,23 @@
 				</div>
 
 				<div class="span6">
-					<h4>Subheading</h4>
-					<p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-					<h4>Subheading</h4>
-					<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+					<div class="row-fluid">
+						<div class="span6">
+							<h4>我们的微信</h4>
+							<img src="img/weixin_qr.png" alt="" class="qr">
+							<p></p>
+						</div>
 
-					<h4>Subheading</h4>
-					<p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+						<div class="span6">
+							<h4>我们的新浪微博</h4>
+							<img src="img/weibo_qr.png" alt="" class="qr">
+							<p></p>
+						</div>
+					</div>
+
+					<h4>关注我们</h4>
+					<p>精彩活动，火锅文化。</p>
 				</div>
 			</div>
 
@@ -168,6 +181,22 @@
 
 			<div class="footer">
 				<p>&copy; 麻辣印象 2013 | Powered by <a herf="http://nerrsoft.com" target="_blank">Nerrsoft.com</a></p>
+			</div>
+
+
+			<div id="help" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3 id="myModalLabel">帮助</h3>
+				</div>
+				<div class="modal-body">
+					<h4>第一步：获取短信动态密码</h4>
+					<p>输入您的手机号码，点击“获取”按钮，等待接受短信密码。</p>
+					<h4>第二步：验证密码</h4>
+					<p>输入短信中的六位动态密码，点击“登陆”按钮，完成验证。</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
 			</div>
 
 		</div> <!-- /container -->
@@ -187,8 +216,9 @@
 				$('.carousel').carousel({
 					interval: 2000
 				});
-
-
+				$('#myModal').modal({
+					keyboard: false
+				})
 
 				//-- send mobile phone number
 				var mpformat = /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
