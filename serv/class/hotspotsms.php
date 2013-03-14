@@ -72,6 +72,8 @@ class hotspotsms
 	{
 		$logtime = time();
 		$mobile  = $_GET['mobile'];
+		$client = $_GET['client'];
+		//$client = addcslashes($client);
 		
 		//-- 确认库中是否存在有效验证码 - 
 		$sql = "select smspass from log where mobile='$mobile' and logtime+300>$logtime order by logtime desc limit 1";
@@ -85,7 +87,8 @@ class hotspotsms
 		else
 		{
 			$smspass = $this->getRandCode();
-			$sql = "insert into log (mobile, smspass, logtime) values ('$mobile', '$smspass', $logtime)";
+			$sql = "insert into log (mobile, smspass, logtime, clientinfo) 
+					values ('$mobile', '$smspass', $logtime, '$client')";
 			mysqli_query($this->_mysqli, $sql);
 		}
 
@@ -126,14 +129,46 @@ class hotspotsms
 		echo $_GET['callback'].'('.json_encode($back).')';
 	}
 
-	public function admin($pass)
+	public function step3()
 	{
-		$html = 'Welcome';
+		$back['client'] = $_GET['client'];
 
-		if($pass != md5('sunyu'))
+		echo $_GET['callback'].'('.json_encode($back).')';
+	}
+
+	public function admin($pass, $sdate='')
+	{
+		$html = '';
+
+		if(md5($pass) == md5('sunyu') && !isset($_SESSION['login']))
+		{
+			$_SESSION['login'] = true;
+		}
+		
+		if(!isset($_SESSION['login']))
+		{
+			$html = '<div class="row-fluid marketing">
+			<div class="span12">
+				<form action="admin.php" method="post">
+						<input id="password" name="password" type="password" />
+					<p>
+						<input class="btn btn-success" type="submit" value="登录" />
+					</p>
+				</form>
+
+			</div>
+			</div>';
+
 			return $html;
+		}
 
-		$sql = "select * from log order by id desc";
+		if($sdate == '')
+			$sdate = date('Y-m-d');
+
+		$tdate_b = strtotime($sdate);
+		$tdate_e = $tdate_b + 24 * 3600;
+
+		$sql = "select * from log where logtime>=$tdate_b and logtime<=$tdate_e order by id desc";
 		$res = $this->_mysqli->query($sql);
 		if($res)
 		{
@@ -150,7 +185,7 @@ class hotspotsms
 
 			while($row = $res->fetch_object())
 			{
-				$html .= '<tr>';
+				$html .= '<tr class="gradeX">';
 				$html .= '<td>'.$row->id.'</td>';
 				$html .= '<td>'.date('Y-m-d H:i:s', $row->logtime).'</td>';
 				$html .= '<td>'.$row->mobile.'</td>';

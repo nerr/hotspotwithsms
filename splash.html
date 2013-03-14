@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>麻辣印象 &middot; 免费无线网络</title>
+		<title>麻香传奇 &middot; 免费无线网络</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="Hotspot Auth Page">
 		<meta name="revised" content="Leon, 2013/3/6/" />
@@ -83,7 +83,7 @@
 				<ul class="nav nav-pills pull-right">
 					<li class="active"><a href="#help" role="button" data-toggle="modal">帮助</a></li>
 				</ul>
-				<h3>麻辣印象 &middot; 免费无线网络 &middot; 登录</h3>
+				<h3>麻香传奇 &middot; 免费无线网络 &middot; 登录</h3>
 			</div>
 
 			<hr>
@@ -180,7 +180,7 @@
 			<hr>
 
 			<div class="footer">
-				<p>&copy; 麻辣印象 2013 | Powered by <a herf="http://nerrsoft.com" target="_blank">Nerrsoft.com</a></p>
+				<p>&copy; 麻香传奇 2013 | Powered by <a herf="http://nerrsoft.com" target="_blank">Nerrsoft.com</a></p>
 			</div>
 
 			<!-- help modal -->
@@ -208,11 +208,37 @@
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="js/jquery.js"></script>
 		<script src="js/jquery.md5.js"></script>
+		<script src="js/jquery.client.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 
 		<!-- js -->
 		<script type="text/javascript">
+
+			// implement JSON.stringify serialization
+			JSON.stringify = JSON.stringify || function (obj) {
+				var t = typeof (obj);
+				if (t != "object" || obj === null) {
+				// simple data type
+				if (t == "string") obj = '"'+obj+'"';
+					return String(obj);
+				}
+				else {
+					// recurse array or object
+					var n, v, json = [], arr = (obj && obj.constructor == Array);
+					for (n in obj) {
+						v = obj[n]; t = typeof(v);
+						if (t == "string") v = '"'+v+'"';
+						else if (t == "object" && v !== null) v = JSON.stringify(v);
+						json.push((arr ? "" : '"' + n + '":') + String(v));
+					}
+					return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+				}
+			};
+
 			$(document).ready(function(){
+				//alert($.client);
+
+
 				$('.carousel').carousel({
 					interval: 2000
 				});
@@ -224,6 +250,7 @@
 				var mpformat = /(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
 				$('#sendmobile').submit(function(){
 					var mp = $.trim($('#mobile').val());
+					var client = JSON.stringify($.client);
 					if(!mp.match(mpformat))
 						$('#sendstatus').html('请确认您的手机号码').attr('class', 'msgerro');
 					else
@@ -232,10 +259,13 @@
 						$('#sendsms').attr('disabled', 'disabled');
 						$('#sendstatus').text('请稍候').attr('class', 'msginfo');
 
-						var url = "http://192.168.2.2/hotspot/serv/auth.php?action=step1&mobile="+mp+"&callback=?";
+						var url = "http://192.168.2.2/hotspot/serv/auth.php?action=step1&mobile="+mp+"&client="+client+"&callback=?";
+
 						$.getJSON(url, function(data){
+
 							if(data.status==true)
 							{
+
 								$('#sendstatus').text('短信发送成功,请查收').attr('class', 'msginfo');
 
 								$('#md5smspass').val(data.md5smspass);
