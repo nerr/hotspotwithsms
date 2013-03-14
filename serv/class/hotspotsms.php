@@ -212,11 +212,12 @@ class hotspotsms
 			while($row = $res->fetch_object())
 			{
 				$client = json_decode($row->clientinfo);
+				$mobileCode = $this->getMobileCodeInfo($row->mobile);
 
 				$html .= '<tr class="gradeX">';
 				$html .= '<td>'.$row->id.'</td>';
 				$html .= '<td>'.date('Y-m-d H:i:s', $row->logtime).'</td>';
-				$html .= '<td>'.$row->mobile.'</td>';
+				$html .= '<td>'.$mobileCode.'</td>';
 				$html .= '<td>'.$row->smspass.'</td>';
 				$html .= '<td>'.$client->os.'</td>';
 				$html .= '<td>'.$client->browser.' '.$client->version.'</td>';
@@ -348,5 +349,21 @@ class hotspotsms
 	protected function connect2db($host, $user, $pass, $db)
 	{
 		$this->_mysqli = new mysqli($host, $user, $pass, $db);
+	}
+
+	protected function getMobileCodeInfo($number)
+	{
+		$url = 'http://webservice.webxml.com.cn/WebServices/MobileCodeWS.asmx/getMobileCodeInfo';   
+  
+		$ch = curl_init();   
+		curl_setopt($ch, CURLOPT_URL, $url);   
+		curl_setopt($ch, CURLOPT_POST, true);   
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "mobileCode={$number}&userId=");   
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);   
+		$data = curl_exec($ch);   
+		curl_close($ch); 
+
+		$data = simplexml_load_string($data);   
+		return $data;
 	}
 }
