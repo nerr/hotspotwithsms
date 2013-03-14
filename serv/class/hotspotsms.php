@@ -129,14 +129,7 @@ class hotspotsms
 		echo $_GET['callback'].'('.json_encode($back).')';
 	}
 
-	public function step3()
-	{
-		$back['client'] = $_GET['client'];
-
-		echo $_GET['callback'].'('.json_encode($back).')';
-	}
-
-	public function admin($pass, $sdate='')
+	public function admin($pass='', $sdate='')
 	{
 		$html = '';
 
@@ -155,9 +148,18 @@ class hotspotsms
 						<input class="btn btn-success" type="submit" value="登录" />
 					</p>
 				</form>
-
 			</div>
 			</div>';
+
+			$html = '
+            <form action="admin.php" method="post" class="navbar-form pull-right">
+              <input id="password" name="password" type="password" />
+              <input class="btn btn-success" type="submit" value="登录" />
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>';
 
 			return $html;
 		}
@@ -172,29 +174,58 @@ class hotspotsms
 		$res = $this->_mysqli->query($sql);
 		if($res)
 		{
-			$html = '<table class="table table-hover">
+			/*$html = '<div class="row-fluid">
+			<div class="span12">
+				<form action="admin.php" method="post" class="navbar-search pull-right">
+						日期：<input id="sdate" name="sdate" type="text" value="'.$sdate.'" />
+
+						<input class="btn btn-success" type="submit" value="查询" />
+
+				</form>
+			</div>
+			</div><hr>';*/
+
+			$html = '
+            <form action="admin.php" method="post" class="navbar-form pull-right">
+              <input id="sdate" name="sdate" type="text" value="'.$sdate.'" />
+              <input class="btn btn-success" type="submit" value="查询" />
+              <a href="admin.php?a=logout" class="btn btn-danger">退出</a>
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>';
+			$html .= '<div class="marketing"><table class="table table-hover">
 					<thead>
 					<tr>
-					<th>#</th>
-					<th>时间</th>
-					<th>手机号码</th>
-					<th>动态密码</th>
+						<th>#</th>
+						<th>时间</th>
+						<th>手机号码</th>
+						<th>动态密码</th>
+						<th>操作系统</th>
+						<th>浏览器</th>
+						<th>语言</th>
 					</tr>
 					</thead>
 					<tbody>';
 
 			while($row = $res->fetch_object())
 			{
+				$client = json_decode($row->clientinfo);
+
 				$html .= '<tr class="gradeX">';
 				$html .= '<td>'.$row->id.'</td>';
 				$html .= '<td>'.date('Y-m-d H:i:s', $row->logtime).'</td>';
 				$html .= '<td>'.$row->mobile.'</td>';
 				$html .= '<td>'.$row->smspass.'</td>';
+				$html .= '<td>'.$client->os.'</td>';
+				$html .= '<td>'.$client->browser.' '.$client->version.'</td>';
+				$html .= '<td>'.$client->language.'</td>';
 				$html .= '</tr>';
 			}
 
 			$html .= '</tbody>
-					</table>';
+					</table></div>';
 
 		}
 

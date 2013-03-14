@@ -1,10 +1,16 @@
 <?php
+session_start();
 include 'config.php';
 require 'class/hotspotsms.php';
 
+if($_GET['a']=='logout')
+	unset($_SESSION['login']);
+
 $hotspot = new hotspotsms($config);
 
-$html = $hotspot->admin($_GET['pass']);
+$html = $hotspot->admin($_POST['password'], $_POST['sdate']);
+
+//var_dump($_SESSION);
 ?>
 
 
@@ -12,7 +18,7 @@ $html = $hotspot->admin($_GET['pass']);
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>麻辣印象 &middot; 免费无线网络</title>
+		<title>麻香传奇 &middot; 免费无线网络</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="Hotspot Auth Page">
 		<meta name="revised" content="Leon, 2013/3/6/" />
@@ -30,7 +36,7 @@ $html = $hotspot->admin($_GET['pass']);
 			/* Custom container */
 			.container-narrow {
 				margin: 0 auto;
-				max-width: 700px;
+				max-width: 980px;
 			}
 			.container-narrow > hr {
 				margin: 30px 0;
@@ -68,9 +74,9 @@ $html = $hotspot->admin($_GET['pass']);
 			.qr {
 				height: 130px;
 			}
-		</style>
-		<link href="css/bootstrap-responsive.css" rel="stylesheet">
 
+		</style>
+		<link href="../css/bootstrap-responsive.css" rel="stylesheet">
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		  <script src="js/html5shiv.js"></script>
@@ -89,22 +95,40 @@ $html = $hotspot->admin($_GET['pass']);
 
 		<div class="container-narrow">
 
-			<div class="masthead">
-				<ul class="nav nav-pills pull-right">
-					<li class="active"><a href="http://weibo.com/mlyinxiang" target="_blank">新浪微博</a></li>
-					<li class="active"><a href="#help" role="button" data-toggle="modal">帮助</a></li>
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="navbar-inner">
+				<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="#">麻香传奇 管理</a>
+				<div class="nav-collapse collapse">
+				<!-- <ul class="nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#contact">Contact</a></li>
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+				<li><a href="#">Action</a></li>
+				<li><a href="#">Another action</a></li>
+				<li><a href="#">Something else here</a></li>
+				<li class="divider"></li>
+				<li class="nav-header">Nav header</li>
+				<li><a href="#">Separated link</a></li>
+				<li><a href="#">One more separated link</a></li>
 				</ul>
-				<h3 class="muted">麻辣印象 &middot; 免费无线网络 &middot; Admin</h3>
-			</div>
+				</li>
+				</ul> -->
 
-			<hr>
-
-			<?php echo $html; ?>
+				<?php echo $html; ?>
 
 			<hr>
 
 			<div class="footer">
-				<p>&copy; 麻辣印象 2013 | Powered by <a herf="http://nerrsoft.com" target="_blank">Nerrsoft.com</a></p>
+				<p>&copy; 麻香传奇 2013 | Powered by <a href="http://nerrsoft.com" target="_blank">Nerrsoft.com</a></p>
 			</div>
 
 			<!-- help modal -->
@@ -136,7 +160,9 @@ $html = $hotspot->admin($_GET['pass']);
 
 		<!-- js -->
 		<script type="text/javascript">
+			$(document).ready(function(){
 
+			});
 		</script>
 
 	</body>
