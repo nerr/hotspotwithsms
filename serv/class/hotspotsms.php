@@ -212,6 +212,7 @@ class hotspotsms
 			while($row = $res->fetch_object())
 			{
 				$client = json_decode($row->clientinfo);
+				$os = $client->useragent;
 				$mobileCode = $this->getMobileCodeInfo($row->mobile);
 
 				$html .= '<tr class="gradeX">';
@@ -219,7 +220,7 @@ class hotspotsms
 				$html .= '<td>'.date('Y-m-d H:i:s', $row->logtime).'</td>';
 				$html .= '<td>'.$mobileCode.'</td>';
 				$html .= '<td>'.$row->smspass.'</td>';
-				$html .= '<td>'.$client->os.'</td>';
+				$html .= '<td>'.$os.'</td>';
 				$html .= '<td>'.$client->browser.' '.$client->version.'</td>';
 				$html .= '<td>'.$client->language.'</td>';
 				$html .= '</tr>';
