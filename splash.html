@@ -237,8 +237,6 @@
 			};
 
 			$(document).ready(function(){
-				//alert($.client);
-
 
 				$('.carousel').carousel({
 					interval: 2000
@@ -252,6 +250,7 @@
 				$('#sendmobile').submit(function(){
 					var mp = $.trim($('#mobile').val());
 					var client = JSON.stringify($.client);
+
 					if(!mp.match(mpformat))
 						$('#sendstatus').html('请确认您的手机号码').attr('class', 'msgerro');
 					else
