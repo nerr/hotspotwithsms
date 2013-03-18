@@ -43,21 +43,21 @@ $(document).ready(function ()
 
         ipAddress: function ()
         {
-
+/*
             if (navigator.javaEnabled() && (navigator.appName != "Microsoft Internet Explorer"))
             {
-                /** firefox do not support
-
                 vartool = java.awt.Toolkit.getDefaultToolkit();
                 addr = java.net.InetAddress.getLocalHost();
                 this.host = addr.getHostName();
-                this.ip = addr.getHostAddress();*/
+                this.ip = addr.getHostAddress();
             }
             else
             {
                 this.host = false;;
                 this.ip = false;
-            }
+            }*/
+
+            this.ip = false;
 
         },
 
@@ -177,7 +177,7 @@ $(document).ready(function ()
         ip: BrowserSpy.ip,
         cpu: BrowserSpy.cpu,
         useragent: BrowserSpy.useragent,
-        plugins: BrowserSpy.plugins
+        //plugins: BrowserSpy.plugins
     };
 
 })
